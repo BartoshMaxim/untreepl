@@ -16,4 +16,4 @@ api_version = "2026-01"
 scopes = "read_inventory,read_locations,read_markets_home,read_orders,read_products,write_fulfillments,write_products"
 
 [auth]
-redirect_urls = [ "https://untreepl-400860611903.us-central1.run.app/api/auth/callback" ]
+redirect_urls = [ "https://untreepl-400860611903.us-central1.run.app/api/auth" ]
