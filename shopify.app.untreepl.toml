@@ -1,28 +1,19 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "06b5d25e6d7ba3addfec3b03444642b2"
+client_id = "b6fa5894f3e186ab9258d18b66d8cf2c"
 name = "untreepl"
 application_url = "https://untreepl-400860611903.us-central1.run.app"
 embedded = false
 
 [build]
 automatically_update_urls_on_dev = true
-include_config_on_deploy = true
 
 [webhooks]
 api_version = "2026-01"
 
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
-
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_orders,read_products,write_products,write_fulfillments,read_inventory,read_locations,read_markets_home"
+scopes = "read_inventory,read_locations,read_markets_home,read_orders,read_products,write_fulfillments,write_products"
 
 [auth]
 redirect_urls = [ "https://untreepl-400860611903.us-central1.run.app/api/auth/callback" ]
