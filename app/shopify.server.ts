@@ -39,10 +39,14 @@ export const shopify = shopifyApp({
         const u = new URL('/api/sync', base);
         u.searchParams.set('shop', shop);
         u.searchParams.set('jobType', jobType);
-        fetch(u.toString(), { method: 'POST' }).catch((err) => console.error(`afterAuth sync trigger failed (${jobType.toLowerCase()})`, err));
+        
+        // Changed to GET (default) and keeping query params
+        fetch(u.toString()).catch((err) => 
+          console.error(`afterAuth sync trigger failed (${jobType.toLowerCase()})`, err)
+        );
       };
 
-      // Fire both syncs without blocking install flow
+      // Fire both syncs
       ['ORDERS', 'PRODUCTS'].forEach(triggerSync);
 
 
