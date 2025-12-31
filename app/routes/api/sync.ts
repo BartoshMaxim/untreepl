@@ -2,7 +2,7 @@ import prisma from "~/db.server";
 import { triggerCloudRunJob } from "~/services/job.controller";
 import { Job, JobType } from "~/models/job";
 
-export const loader = async ({ request }: any) => {
+export async function loader ({ request }: any) {
   const url = new URL(request.url);
   const jobTypeParam = url.searchParams.get('jobType') || undefined;
   
