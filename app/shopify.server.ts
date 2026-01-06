@@ -7,27 +7,35 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
+console.log("Initializing Shopify App with API Key:", process.env.SHOPIFY_API_KEY);
+console.log("Initializing Shopify App with API Secret:", process.env.SHOPIFY_API_SECRET);
+console.log("Initializing Shopify App with Scopes:", process.env.SCOPES);
+console.log("Initializing Shopify App with App URL:", process.env.SHOPIFY_APP_URL);
+console.log("Initializing Shopify App with Custom Shop Domain:", process.env.SHOP_CUSTOM_DOMAIN);
+// In shopify.server.ts or db.server.ts, temporarily:
+console.log("[DEBUG] DATABASE_URL", process.env.DATABASE_URL);
+
 export const shopify = shopifyApp({
-  apiKey: process.env.SHOPIFY_API_KEY,
-  apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
+  apiKey: process.env.SHOPIFY_API_KEY?.trim() || "",
+  apiSecretKey: process.env.SHOPIFY_API_SECRET?.trim() || "",
   apiVersion: ApiVersion.October25,
   scopes: process.env.SCOPES?.split(","),
-  appUrl: process.env.SHOPIFY_APP_URL || "",
+  appUrl: process.env.SHOPIFY_APP_URL?.trim() || "",
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   future: {
-    expiringOfflineAccessTokens: true,
+    expiringOfflineAccessTokens: false,
   },
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
   // Trigger our initial sync after a fresh install via afterAuth hook
-  afterAuth: async ({ session, isNew }: any) => {
+  hooks:{
+  afterAuth: async ({ session, admin }: any) => {
     try {
 
-      console.log('afterAuth hook - isNew:', isNew);
-      if (!isNew) return;
+      console.log('afterAuth hook - ');
       const shop = session?.shop;
       if (!shop) return;
 
@@ -54,7 +62,7 @@ export const shopify = shopifyApp({
       console.error('afterAuth sync trigger failed', e);
     }
   },
-});
+}});
 
 export default shopify;
 export const apiVersion = ApiVersion.October25;

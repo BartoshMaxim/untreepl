@@ -1,5 +1,5 @@
 export async function sendTo3PLBatch(type: "orders" | "products", payload: any, idempotencyKey: string) {
-  const url = process.env.THREEPL_MOCK_URL!;
+  const url = process.env.THREEPL_API_URL || "https://webhook.site/testshopify";
   const res = await fetch(url, {
     method: "POST",
     headers: {

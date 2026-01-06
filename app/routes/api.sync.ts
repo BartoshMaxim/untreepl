@@ -3,10 +3,18 @@ import { triggerCloudRunJob } from "~/services/job.controller";
 import { Job, JobType } from "~/models/job";
 
 export async function loader ({ request }: any) {
+
+  console.log("api.sync.ts loader called");
+
   const url = new URL(request.url);
   const jobTypeParam = url.searchParams.get('jobType') || undefined;
   
+
+  console.log("api.sync.ts loader request.url",request.url);
+
   const shop = url.searchParams.get('shop') || undefined;
+  
+  console.log("api.sync.ts loader shop", shop);
 
   let jobType: JobType | undefined = undefined;
 
@@ -28,7 +36,7 @@ export async function loader ({ request }: any) {
 
   const job = await Job.create(prisma, shop, jobType);
 
-  //await triggerCloudRunJob(job.id);
+  await triggerCloudRunJob(job.id);
 
   return new Response(JSON.stringify({ jobId: job.id }), { status: 202 });
 };

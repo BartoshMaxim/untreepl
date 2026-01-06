@@ -15,18 +15,15 @@ export async function fetchOrdersBatch(
     query: `created_at:>=${createdAtMin}`,
   };
 
-  const r = await client.query<OrdersQueryResponse>({
-    data: {
-      query: ORDERS_QUERY,
+  const r = await client.request(ORDERS_QUERY, {
       variables,
-    },
   });
 
-  if (!r.body) {
-    throw new Error('Missing response body from Admin GraphQL query');
+  if (!r.data) {
+    throw new Error('Missing response data from Admin GraphQL query');
   }
 
-  const orders = r.body.data.orders;
+  const orders = r.data.orders;
   const edges = orders.edges;
   const pageInfo = orders.pageInfo;
 
@@ -40,23 +37,21 @@ export async function fetchProductsBatch(
   client: GraphqlClient,
   cursor: string | null,
 ) {
+
   const variables = {
-    first: 50,
+    first: 10,
     after: cursor,
   };
 
-  const r = await client.query<ProductsQueryResponse>({
-    data: {
-      query: PRODUCTS_QUERY,
+  const r = await client.request(PRODUCTS_QUERY,{
       variables,
-    },
   });
 
-  if (!r.body) {
+  if (!r.data) {
     throw new Error('Missing response body from Admin GraphQL query');
   }
 
-  const products = r.body.data.products;
+  const products = r.data.products;
   const edges = products.edges;
   const pageInfo = products.pageInfo;
 

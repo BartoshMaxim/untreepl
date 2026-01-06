@@ -1,16 +1,18 @@
-// app/routes/app._index.tsx
-import React, { useEffect } from "react";
+import type {
+  HeadersFunction,
+  LoaderFunctionArgs,
+} from "react-router";
+import { authenticate } from "../shopify.server";
+import { boundary } from "@shopify/shopify-app-react-router/server";
 
-export default function InstalledLanding() {
-  useEffect(() => {
-    // Immediately redirect the merchant outside the app.
-    // No sync call here because sync is created in afterAuth on the server.
-    window.location.href = "https://www.smelo.com/login.html";
-  }, []);
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { redirect } = await authenticate.admin(request);
 
-  return (
-    <div style={{ padding: 24 }}>
-      <p>Redirecting…</p>
-    </div>
-  );
-}
+  // Redirect the merchant to an external URL
+  // Use target: '_top' or '_parent' so it navigates the whole window
+  return redirect("https://www.untreepl.com/login.html", { target: "_top" });
+};
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};

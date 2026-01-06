@@ -12,7 +12,7 @@ export const shopify = shopifyApi({
   apiKey: process.env.SHOPIFY_API_KEY!,
   apiSecretKey: process.env.SHOPIFY_API_SECRET!,
   scopes: process.env.SCOPES!.split(','),
-  hostName: process.env.HOST!.replace(/https?:\/\//, ''),
+  hostName: process.env.HOST?.replace(/https?:\/\//, '') || "localhost:3000",
   apiVersion: apiVersion, // or latest version you target
   isEmbeddedApp: false,
 });
@@ -98,7 +98,7 @@ async function processProducts(
   }
 }
 
-async function main() {
+export async function main() {
   const job = await Job.claim(prisma, JOB_ID!);
   if (!job) {
     console.log("Job not claimable. Exiting.");
@@ -110,6 +110,8 @@ async function main() {
   if (!dbSession) { 
     throw new Error("Session not found for shop " + job.shop);
   }
+
+  console.log("Starting job", job.id, "of type", job.type, "for shop", job.shop);
 
   const session = makeSessionFromDb(dbSession);
 
