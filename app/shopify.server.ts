@@ -8,12 +8,6 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import prisma from "./db.server";
 
 console.log("Initializing Shopify App with API Key:", process.env.SHOPIFY_API_KEY);
-console.log("Initializing Shopify App with API Secret:", process.env.SHOPIFY_API_SECRET);
-console.log("Initializing Shopify App with Scopes:", process.env.SCOPES);
-console.log("Initializing Shopify App with App URL:", process.env.SHOPIFY_APP_URL);
-console.log("Initializing Shopify App with Custom Shop Domain:", process.env.SHOP_CUSTOM_DOMAIN);
-// In shopify.server.ts or db.server.ts, temporarily:
-console.log("[DEBUG] DATABASE_URL", process.env.DATABASE_URL);
 
 export const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY?.trim() || "",
@@ -35,7 +29,7 @@ export const shopify = shopifyApp({
   afterAuth: async ({ session, admin }: any) => {
     try {
 
-      console.log('afterAuth hook - ');
+      console.log('afterAuth hook started for shop:', session.shop);
       const shop = session?.shop;
       if (!shop) return;
 
@@ -55,11 +49,14 @@ export const shopify = shopifyApp({
       };
 
       // Fire both syncs
-      ['ORDERS', 'PRODUCTS'].forEach(triggerSync);
+      ['ORDERS', 'PRODUCTS', 'FULFILLMENT_SERVICE'].forEach(triggerSync);
 
 
     } catch (e: any) {
       console.error('afterAuth sync trigger failed', e);
+    }
+    finally{
+      console.log('afterAuth hook completed');
     }
   },
 }});
