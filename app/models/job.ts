@@ -11,6 +11,7 @@ export enum JobStatus {
 export enum JobType {
   ORDERS = "ORDERS",
   PRODUCTS = "PRODUCTS",
+  FULFILLMENT_SERVICE = "FULFILLMENT_SERVICE",  
 }
 
 

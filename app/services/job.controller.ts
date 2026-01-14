@@ -11,7 +11,7 @@ export interface CloudRunJobResponse {
   startTime?: string;
 }
 
-export async function triggerCloudRunJob(jobId: string): Promise<CloudRunJobResponse> {
+export async function triggerCloudRunJob(jobId: string, apiUrl?: string): Promise<CloudRunJobResponse> {
   if (!PROJECT_ID) {
     throw new Error("GCP_PROJECT_ID environment variable is not set");
   }
@@ -27,11 +27,18 @@ export async function triggerCloudRunJob(jobId: string): Promise<CloudRunJobResp
     const client = await auth.getClient();
     const url = `https://run.googleapis.com/v2/projects/${PROJECT_ID}/locations/${REGION}/jobs/${JOB_NAME}:run`;
 
+    const envVars = [{ name: "JOB_ID", value: jobId }];
+    
+    // Add THREEPL_API_URL if apiUrl is provided
+    if (apiUrl) {
+      envVars.push({ name: "THREEPL_API_URL", value: apiUrl });
+    }
+
     const body = {
       overrides: {
         containerOverrides: [
           {
-            env: [{ name: "JOB_ID", value: jobId }]
+            env: envVars
           }
         ]
       }
