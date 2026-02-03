@@ -53,8 +53,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
         type: job.type,
         shop: job.shop,
         createdAt: job.createdAt,
-        updatedAt: job.updatedAt,
-        errorMessage: job.errorMessage || null
       }),
       { 
         status: 200,

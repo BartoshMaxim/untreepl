@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { json } from "react-router";
 import prisma from "~/db.server";
 import { triggerCloudRunJob } from "~/services/job.controller";
 import { Job, JobType } from "~/models/job";

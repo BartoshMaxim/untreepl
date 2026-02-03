@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM oven/bun:1-alpine
 RUN apk add --no-cache openssl
 
 EXPOSE 3000
@@ -7,12 +7,12 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json* ./
+COPY package.json bun.lockb* ./
 
-RUN npm ci --omit=dev && npm cache clean --force
+RUN bun install --frozen-lockfile --production
 
 COPY . .
 
-RUN npm run build
+RUN bun run build
 
-CMD ["npm", "run", "docker-start"]
+CMD ["bun", "run", "docker-start"]
