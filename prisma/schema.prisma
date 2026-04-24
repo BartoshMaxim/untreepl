@@ -37,7 +37,7 @@ model Job {
   id              String   @id @default(cuid())
   shop            String
   status          String   @default("PENDING") // PENDING | RUNNING | FAILED | COMPLETED
-  type            String   @default("ORDERS") // ORDERS | PRODUCTS
+  type            String   @default("ORDERS") // ORDERS | PRODUCTS | FULFILLMENT_SERVICE
   settings        String?  // JSON execution state
   lastHeartbeatAt DateTime?
   attempt         Int      @default(0)
